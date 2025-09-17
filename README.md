@@ -12,7 +12,7 @@ A proxy for Gemini API.
 ## Build
 
 ```bash
-make build
+CGO_ENABLED=0 go build .
 ```
 
 ## Usage

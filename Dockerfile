@@ -1,6 +1,4 @@
-FROM golang:1.22-alpine AS builder
-
-RUN apk add --no-cache build-base git make
+FROM golang:1.23-alpine AS builder
 
 ENV GOPROXY='https://goproxy.cn'
 
@@ -11,11 +9,13 @@ RUN go mod download
 
 COPY . .
 
+RUN CGO_ENABLED=0 go build .
+
 FROM alpine
 
 RUN apk --no-cache add tzdata
 
-COPY --from=builder /src/bin /app
+COPY --from=builder /src/geminiproxy /app/geminiproxy
 
 WORKDIR /app
 
