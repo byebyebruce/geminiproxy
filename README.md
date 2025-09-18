@@ -29,11 +29,11 @@ docker build -t geminiproxy .
 2. Docker
 - use proxy
 ```bash
-docker run -it -p 8085:8085 byebyebruce/geminiproxy --proxy=http://127.0.0.1:1080
+docker run -it -p 8085:8085 ghcr.io/byebyebruce/geminiproxy --proxy=http://127.0.0.1:1080
 ```
 - no proxy
 ```bash
-docker run -it -p 8085:8085 byebyebruce/geminiproxy 
+docker run -it -p 8085:8085 ghcr.io/byebyebruce/geminiproxy 
 ```
 
 ## Test
