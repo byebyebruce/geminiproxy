@@ -7,7 +7,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/sashabaranov/go-openai"
 	"google.golang.org/genai"
 )
 
@@ -29,7 +28,7 @@ When I was lying there in the VA hospital ...
 我被送进了退伍军人管理局医院
 ... with a big hole blown through the middle of my life,
 */
-func sentence2SRT(resp *openai.AudioResponse) string {
+func sentence2SRT(resp *AudioResponse) string {
 	lines := make([]string, 0, len(resp.Segments))
 	for i, sentence := range resp.Segments {
 		line := fmt.Sprintf("%d\n%s\n%s",

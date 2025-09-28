@@ -27,11 +27,15 @@ func TestTranscribe(t *testing.T) {
 		t.Fatalf("Failed to create client: %v", err)
 	}
 
-	audioBytes, _ := os.ReadFile("test.mp3")
+	audioBytes, _ := os.ReadFile("testdata.mp3")
 
-	resp, err := Transcribe(context.Background(), c, "gemini-2.5-flash", "", "mp3", audioBytes, "json")
+	resp, err := Transcribe(context.Background(), c, "gemini-2.5-flash", "", "wav", audioBytes, "json")
 	if err != nil {
 		t.Fatalf("Failed to transcribe: %v", err)
+	}
+
+	for _, s := range resp.Segments {
+		fmt.Println(s.Start, s.End, s.Text)
 	}
 	fmt.Println(resp)
 }
