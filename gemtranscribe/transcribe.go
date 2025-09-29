@@ -18,8 +18,8 @@ Requirements:
 - Make sure segment boundaries are logical and natural.
 - For each segment, provide the start and end timestamps the format of timecode. Return the result as a JSON array, where each object contains:
 	- "text": the transcribed segment,
-	- "start": the start time (in timecode),
-	- "end": the end time (in timecode).
+	- "start": the start time (in timecode, 00:01:19,33 format),
+	- "end": the end time (in timecode, 00:31:22,10 format).
 
 Example output:
 {
@@ -175,22 +175,32 @@ func Transcribe(ctx context.Context, cli *genai.Client, model string, userPrompt
 }
 
 // 00:00:13,99 -> 13.99
+// 00:13,99 -> 13.99
 func timecode2Seconds(timecode string) (float64, error) {
 	parts := strings.SplitN(timecode, ":", 3)
-	if len(parts) != 3 {
+	var (
+		hours   string
+		minutes string
+		seconds string
+	)
+	if len(parts) == 2 {
+		minutes = parts[0]
+		seconds = parts[1]
+	} else if len(parts) == 3 {
+		hours = parts[0]
+		minutes = parts[1]
+		seconds = parts[2]
+	} else {
 		return 0, fmt.Errorf("invalid timecode: %s", timecode)
 	}
-	hours := parts[0]
 	hoursInt, err := strconv.Atoi(hours)
 	if err != nil {
 		return 0, fmt.Errorf("invalid hours: %s", hours)
 	}
-	minutes := parts[1]
 	minutesInt, err := strconv.Atoi(minutes)
 	if err != nil {
 		return 0, fmt.Errorf("invalid minutes: %s", minutes)
 	}
-	seconds := parts[2]
 	seconds = strings.ReplaceAll(seconds, ",", ".")
 	// 13,99
 	secondsFloat, err := strconv.ParseFloat(seconds, 64)
